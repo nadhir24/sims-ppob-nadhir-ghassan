@@ -70,14 +70,12 @@ export function AccountPage() {
     setError("");
 
     try {
-      const response = await updateProfileImage(file);
-      console.log("Upload response:", response);
+      await updateProfileImage(file);
       // Refresh user data from server instead of full page reload
       dispatch(fetchProfileAsync());
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
-      console.error("Upload error:", err);
       setError(err || "Gagal upload foto profil");
     } finally {
       setUploading(false);

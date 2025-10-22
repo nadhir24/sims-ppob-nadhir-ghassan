@@ -17,13 +17,10 @@ const initialState: AuthState = {
 };
 
 const normalizeUser = (user: User): User => {
-  console.log("normalizeUser original profile_image:", user.profile_image);
-  const normalized = {
+  return {
     ...user,
     profile_image: user.profile_image === "null" || !user.profile_image || user.profile_image.includes("/null") ? "" : user.profile_image,
   };
-  console.log("normalizeUser normalized profile_image:", normalized.profile_image);
-  return normalized;
 };
 
 export const loginAsync = createAsyncThunk(
