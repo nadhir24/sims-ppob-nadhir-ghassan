@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Header } from "@/components/Header";
 import { AtSign, User, Edit2 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { updateProfileAsync, logout } from "@/lib/features/auth/authSlice";
+import { updateProfileAsync, logout, fetchProfileAsync } from "@/lib/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { updateProfileImage } from "@/lib/api/auth";
 
@@ -70,9 +70,14 @@ export function AccountPage() {
     setError("");
 
     try {
-      await updateProfileImage(file);
-      window.location.reload();
+      const response = await updateProfileImage(file);
+      console.log("Upload response:", response);
+      // Refresh user data from server instead of full page reload
+      dispatch(fetchProfileAsync());
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
+      console.error("Upload error:", err);
       setError(err || "Gagal upload foto profil");
     } finally {
       setUploading(false);
