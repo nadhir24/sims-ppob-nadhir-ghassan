@@ -20,14 +20,12 @@ export function TopUpPage() {
   const [error, setError] = useState("");
 const [displayAmount, setDisplayAmount] = useState(""); 
 const navigate = useNavigate();
-// Fungsi format ke Rupiah
 const formatToRupiah = (value: string) => {
   const numbers = value.replace(/[^\d]/g, ""); 
   if (!numbers) return "";
   return "Rp" + parseInt(numbers).toLocaleString("id-ID");
 };
 
-// Fungsi ambil angka murni
 const getNumericValue = (value: string) => {
   return value.replace(/[^\d]/g, "");
 };

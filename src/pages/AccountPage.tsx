@@ -12,6 +12,7 @@ export function AccountPage() {
   const navigate = useNavigate();
   const { user, isLoading } = useAppSelector((state) => state.auth);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const successTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   const [formData, setFormData] = useState({
     email: "",
@@ -33,6 +34,14 @@ export function AccountPage() {
     }
   }, [user]);
 
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -46,7 +55,10 @@ export function AccountPage() {
       })).unwrap();
       setIsEditing(false);
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+      successTimeoutRef.current = setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
       setError(err || "Gagal update profile");
     }
@@ -74,7 +86,10 @@ export function AccountPage() {
       // Refresh user data from server instead of full page reload
       dispatch(fetchProfileAsync());
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+      successTimeoutRef.current = setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
       setError(err || "Gagal upload foto profil");
     } finally {
